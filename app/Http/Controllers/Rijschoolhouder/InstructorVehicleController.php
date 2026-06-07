@@ -184,8 +184,8 @@ class InstructorVehicleController extends Controller
 
         if (! $this->vehicleModel->removeVehicleAssignment($vehicle)) {
             return back()
-            ->withErrors([
-                'vehicle' => 'Voertuig kon niet worden verwijderd.'
+                ->withErrors([
+                    'vehicle' => 'Voertuig kon niet worden verwijderd.',
                 ]);
         }
 
@@ -225,8 +225,8 @@ class InstructorVehicleController extends Controller
         if ($vehicleId === false) {
             return back()
                 ->withErrors([
-                    'vehicle' => 'Voertuig kon niet worden toegevoegd.'
-                    ])
+                    'vehicle' => 'Voertuig kon niet worden toegevoegd.',
+                ])
                 ->withInput();
         }
 
