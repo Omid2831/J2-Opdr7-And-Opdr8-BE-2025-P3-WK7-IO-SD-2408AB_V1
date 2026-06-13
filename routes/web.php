@@ -36,6 +36,9 @@ Route::middleware(['auth', 'role:rijschoolhouder'])
             ->name('vehicles.all');
         Route::get('/instructeurs', [InstructorController::class, 'index'])
             ->name('instructors.index');
+        Route::post('/instructeurs/{instructor}/status', [InstructorController::class, 'toggleStatus'])
+            ->whereNumber('instructor')
+            ->name('instructors.toggleStatus');
         Route::get('/instructeurs/{instructor}/voertuigen', [InstructorVehicleController::class, 'index'])
             ->name('instructors.vehicles.index');
         Route::get(
