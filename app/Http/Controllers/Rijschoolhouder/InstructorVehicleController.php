@@ -8,6 +8,7 @@ use App\Models\Instructor;
 use App\Models\Vehicle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
@@ -43,11 +44,14 @@ class InstructorVehicleController extends Controller
         ]);
     }
 
-    public function allVehicles(): View
+    public function allVehicles(Request $request): View
     {
         $rows = $this->vehicleModel->fetchAll();
 
-        $vehicles = collect($rows)->map(function (object $vehicle): array {
+        $perPage = 4;
+        $page = (int) $request->input('page', 1);
+
+        $collection = collect($rows)->map(function (object $vehicle): array {
             $isAssigned = ($vehicle->source ?? 'assigned') === 'assigned';
 
             return [
@@ -68,7 +72,15 @@ class InstructorVehicleController extends Controller
                     : '-',
                 'is_assigned' => $isAssigned,
             ];
-        })->values()->all();
+        })->values();
+
+        $vehicles = new LengthAwarePaginator(
+            $collection->forPage($page, $perPage),
+            $collection->count(),
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()],
+        );
 
         return view('rijschoolhouder.vehicles.index', [
             'vehicles' => $vehicles,
