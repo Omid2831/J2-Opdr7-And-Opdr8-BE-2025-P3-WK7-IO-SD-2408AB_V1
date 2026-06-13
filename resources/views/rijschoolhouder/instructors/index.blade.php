@@ -30,21 +30,22 @@
                     <table class="w-full table-fixed border-collapse text-sm">
                         <thead class="bg-gray-50">
                             <tr class="text-left">
-                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[28%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Naam') }}
                                 </th>
-                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[16%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Mobiel') }}
                                 </th>
-                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[16%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Datum in dienst') }}
                                 </th>
-                                <th
-                                    class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[12%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Aantal sterren') }}
                                 </th>
-                                <th
-                                    class="w-24 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
+                                <th class="w-24 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
+                                    {{ __('Ziekte/Verlof') }}
+                                </th>
+                                <th class="w-24 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
                                     {{ __('Voertuigen') }}
                                 </th>
                             </tr>
@@ -59,6 +60,31 @@
                                         {{ $instructor['datum_in_dienst'] }}</td>
                                     <td class="px-4 py-2 align-middle whitespace-nowrap">
                                         {{ $instructor['aantal_sterren'] }}</td>
+                                    <td class="px-4 py-2 text-center align-middle">
+                                        <form method="POST"
+                                            action="{{ route('rijschoolhouder.instructors.toggleStatus', $instructor['id']) }}">
+                                            @csrf
+                                            <button type="submit"
+                                                class="inline-flex items-center justify-center text-gray-700 hover:text-gray-900"
+                                                title="{{ __('Ziekte/Verlof wijzigen') }}">
+                                                @if ($instructor['is_actief'])
+                                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"
+                                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                @else
+                                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0016.5 3c-1.76 0-3 .5-4.5 1.5-1.5-1-3-1.5-4.5-1.5A5.5 5.5 0 002 11.5c0 2.3 1.5 4.05 3 5.5l7 7Z"
+                                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                @endif
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td class="px-4 py-2 text-center align-middle">
                                         <a href="{{ route('rijschoolhouder.instructors.vehicles.index', $instructor['id']) }}"
                                             class="inline-flex items-center justify-center text-gray-700 hover:text-gray-900">

@@ -31,30 +31,30 @@
                     <table class="w-full table-fixed border-collapse text-sm">
                         <thead class="bg-gray-50">
                             <tr class="text-left">
-                                <th class="w-[14%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Type voertuig') }}
                                 </th>
-                                <th class="w-[14%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Type') }}
                                 </th>
-                                <th class="w-[14%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Kenteken') }}
                                 </th>
-                                <th class="w-[12%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Bouwjaar') }}
                                 </th>
-                                <th class="w-[12%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Brandstof') }}
                                 </th>
-                                <th class="w-[14%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Rijbewijscategorie') }}
                                 </th>
                                 <th
-                                    class="w-24 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
+                                    class="px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
                                     {{ __('Toevoegen') }}
                                 </th>
                                 <th
-                                    class="w-24 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
+                                    class="px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
                                     {{ __('Wijzigen') }}
                                 </th>
                             </tr>

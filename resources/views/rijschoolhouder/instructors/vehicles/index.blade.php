@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-8">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-9xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm sm:rounded-lg p-6">
                 <div class="space-y-1 text-sm text-gray-700">
                     <div>
@@ -40,30 +40,30 @@
                     <table class="w-full table-fixed border-collapse text-sm">
                         <thead class="bg-gray-50">
                             <tr class="text-left">
-                                <th class="w-[18%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Type voertuig') }}
                                 </th>
-                                <th class="w-[16%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Type') }}
                                 </th>
-                                <th class="w-[16%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Kenteken') }}
                                 </th>
-                                <th class="w-[12%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class=" px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Bouwjaar') }}
                                 </th>
-                                <th class="w-[14%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Brandstof') }}
                                 </th>
-                                <th class="w-[16%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Rijbewijscategorie') }}
                                 </th>
                                 <th
-                                    class="w-20 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
+                                    class="px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
                                     {{ __('Wijzigen') }}
                                 </th>
                                 <th
-                                    class="w-20 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
+                                    class="px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
                                     {{ __('Verwijderen') }}
                                 </th>
                             </tr>
