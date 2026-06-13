@@ -65,4 +65,51 @@ class Instructor extends Model
             throw $exception;
         }
     }
+
+    public function toggleStatus(int $legacyInstructorId, bool $isActief): bool
+    {
+        try {
+            Log::info('Instructor status toggle started.', [
+                'legacy_instructor_id' => $legacyInstructorId,
+                'is_actief' => $isActief ? 1 : 0,
+            ]);
+
+            DB::statement('CALL sp_toggle_instructor_status(?, ?)', [
+                $legacyInstructorId,
+                $isActief ? 1 : 0,
+            ]);
+
+            Log::info('Instructor status toggle completed.', [
+                'legacy_instructor_id' => $legacyInstructorId,
+                'is_actief' => $isActief ? 1 : 0,
+            ]);
+
+            return true;
+        } catch (Throwable $exception) {
+            Log::error('Instructor status toggle failed.', [
+                'legacy_instructor_id' => $legacyInstructorId,
+                'is_actief' => $isActief ? 1 : 0,
+                'exception' => $exception,
+            ]);
+
+            return false;
+        }
+    }
+
+    public function fetchByLegacyId(int $legacyInstructorId): ?object
+    {
+        try {
+            Log::info('Instructor by legacy id fetch started.', ['legacy_instructor_id' => $legacyInstructorId]);
+            $rows = DB::select('SELECT * FROM Instructeur WHERE Id = ?', [$legacyInstructorId]);
+            Log::info('Instructor by legacy id fetched.', ['legacy_instructor_id' => $legacyInstructorId]);
+
+            return $rows[0] ?? null;
+        } catch (Throwable $exception) {
+            Log::error('Instructor by legacy id fetch failed.', [
+                'legacy_instructor_id' => $legacyInstructorId,
+                'exception' => $exception,
+            ]);
+            throw $exception;
+        }
+    }
 }
