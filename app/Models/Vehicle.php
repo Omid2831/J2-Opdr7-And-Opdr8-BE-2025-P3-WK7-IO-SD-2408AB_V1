@@ -190,6 +190,50 @@ class Vehicle extends Model
         }
     }
 
+    public function fetchReclaimableVehicles(int $legacyInstructorId): array
+    {
+        try {
+            Log::info('Reclaimable vehicles fetch started.', ['legacy_instructor_id' => $legacyInstructorId]);
+            $rows = DB::select('CALL sp_get_reclaimable_vehicles(?)', [$legacyInstructorId]) ?? [];
+            Log::info('Reclaimable vehicles fetched.', ['count' => count($rows)]);
+
+            return $rows;
+        } catch (Throwable $exception) {
+            Log::error('Reclaimable vehicles fetch failed.', [
+                'legacy_instructor_id' => $legacyInstructorId,
+                'exception' => $exception,
+            ]);
+            throw $exception;
+        }
+    }
+
+    public function reclaimVehicle(int $legacyVehicleId, int $legacyInstructorId): bool
+    {
+        try {
+            Log::info('Vehicle reclaim started.', [
+                'legacy_vehicle_id' => $legacyVehicleId,
+                'legacy_instructor_id' => $legacyInstructorId,
+            ]);
+
+            DB::statement('CALL sp_reclaim_vehicle(?, ?)', [$legacyVehicleId, $legacyInstructorId]);
+
+            Log::info('Vehicle reclaim completed.', [
+                'legacy_vehicle_id' => $legacyVehicleId,
+                'legacy_instructor_id' => $legacyInstructorId,
+            ]);
+
+            return true;
+        } catch (Throwable $exception) {
+            Log::error('Vehicle reclaim failed.', [
+                'legacy_vehicle_id' => $legacyVehicleId,
+                'legacy_instructor_id' => $legacyInstructorId,
+                'exception' => $exception,
+            ]);
+
+            return false;
+        }
+    }
+
     public function addLegacyVehicleAssignment(int $legacyVehicleId, int $legacyInstructorId): bool
     {
         try {

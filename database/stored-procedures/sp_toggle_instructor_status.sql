@@ -17,13 +17,27 @@ BEGIN
         DatumGewijzigd = NOW()
     WHERE Id = p_instructeur_id;
     
-    -- If deactivating, also deactivate all vehicle assignments
+    -- If deactivating, deactivate all vehicle assignments
+    -- If reactivating, restore all previous vehicle assignments
     IF p_is_actief = 0 THEN
         UPDATE VoertuigInstructeur
         SET IsActief = 0,
             DatumGewijzigd = NOW()
         WHERE InstructeurId = p_instructeur_id
           AND IsActief = 1;
+    ELSE
+        UPDATE VoertuigInstructeur vi
+        SET vi.IsActief = 1,
+            vi.DatumGewijzigd = NOW()
+        WHERE vi.InstructeurId = p_instructeur_id
+          AND vi.IsActief = 0
+          AND NOT EXISTS (
+              SELECT 1
+              FROM VoertuigInstructeur vi2
+              WHERE vi2.VoertuigId = vi.VoertuigId
+                AND vi2.IsActief = 1
+                AND vi2.InstructeurId != p_instructeur_id
+          );
     END IF;
 END $$
 

@@ -59,6 +59,10 @@
                                     {{ __('Rijbewijscategorie') }}
                                 </th>
                                 <th
+                                    class="px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap w-24">
+                                    {{ __('Toegewezen') }}
+                                </th>
+                                <th
                                     class="px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
                                     {{ __('Wijzigen') }}
                                 </th>
@@ -80,42 +84,74 @@
                                     <td class="px-4 py-2 align-middle">{{ $vehicle->fuel_type }}</td>
                                     <td class="px-4 py-2 align-middle">{{ $vehicle->license_category }}</td>
                                     <td class="px-4 py-2 text-center align-middle">
-                                        <a href="{{ route('rijschoolhouder.vehicles.edit', $vehicle->id) }}"
-                                            class="inline-flex items-center justify-center text-gray-700 hover:text-gray-900">
-                                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                        @if ($vehicle->is_reclaimable ?? false)
+                                            <form method="POST"
+                                                action="{{ route('rijschoolhouder.instructors.vehicles.reclaim', ['instructor' => $instructor['id'], 'legacyVehicle' => $vehicle->legacy_vehicle_id]) }}">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="inline-flex items-center justify-center text-red-600 hover:text-red-800"
+                                                    title="{{ __('Voertuig terugvorderen') }}">
+                                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor"
+                                                            stroke-width="2" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        @else
+                                            <svg class="h-5 w-5 mx-auto text-green-600" viewBox="0 0 24 24" fill="none"
                                                 xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4 20h4l10.5-10.5a1.5 1.5 0 10-4-4L4 16v4z"
-                                                    stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-                                                    stroke-linejoin="round" />
-                                                <path d="M13.5 6.5l4 4" stroke="currentColor" stroke-width="1.5"
+                                                <path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2"
                                                     stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
-                                        </a>
+                                        @endif
                                     </td>
                                     <td class="px-4 py-2 text-center align-middle">
-                                        <form method="POST"
-                                            action="{{ route('rijschoolhouder.instructors.vehicles.destroy', $vehicle->id) }}">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="inline-flex items-center justify-center text-red-600 hover:text-red-800"
-                                                title="{{ __('Verwijderen') }}"
-                                                onclick="return confirm('{{ __('Weet u zeker dat u dit voertuig wilt verwijderen?') }}')">
+                                        @if ($vehicle->is_reclaimable ?? false)
+                                            <span class="text-gray-400">-</span>
+                                        @else
+                                            <a href="{{ route('rijschoolhouder.vehicles.edit', $vehicle->id) }}"
+                                                class="inline-flex items-center justify-center text-gray-700 hover:text-gray-900">
                                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
                                                     xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"
+                                                    <path d="M4 20h4l10.5-10.5a1.5 1.5 0 10-4-4L4 16v4z"
                                                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                                                         stroke-linejoin="round" />
-                                                    <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5"
+                                                    <path d="M13.5 6.5l4 4" stroke="currentColor" stroke-width="1.5"
                                                         stroke-linecap="round" stroke-linejoin="round" />
                                                 </svg>
-                                            </button>
-                                        </form>
+                                            </a>
+                                        @endif
+                                    </td>
+                                    <td class="px-4 py-2 text-center align-middle">
+                                        @if ($vehicle->is_reclaimable ?? false)
+                                            <span class="text-gray-400">-</span>
+                                        @else
+                                            <form method="POST"
+                                                action="{{ route('rijschoolhouder.instructors.vehicles.destroy', $vehicle->id) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="inline-flex items-center justify-center text-red-600 hover:text-red-800"
+                                                    title="{{ __('Verwijderen') }}"
+                                                    onclick="return confirm('{{ __('Weet u zeker dat u dit voertuig wilt verwijderen?') }}')">
+                                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                        xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"
+                                                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                            stroke-linejoin="round" />
+                                                        <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5"
+                                                            stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="px-4 py-6 text-center text-gray-500">
+                                    <td colspan="9" class="px-4 py-6 text-center text-gray-500">
                                         {{ __('Geen voertuigen gevonden.') }}
                                     </td>
                                 </tr>

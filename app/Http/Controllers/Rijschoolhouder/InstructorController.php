@@ -73,7 +73,7 @@ class InstructorController extends Controller
         );
 
         $message = $newStatus
-            ? "Instructeur {$instructorName} is weer actief"
+            ? "Instructeur {$instructorName} is beter/terug van verlof gemeld"
             : "Instructeur {$instructorName} is ziek/met verlof gemeld";
 
         return redirect()->route('loadbar', [

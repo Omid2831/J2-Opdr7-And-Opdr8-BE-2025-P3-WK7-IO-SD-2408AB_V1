@@ -27,7 +27,36 @@ class InstructorVehicleController extends Controller
             abort(404, 'Instructor not found.');
         }
 
-        $vehicles = $this->vehicleModel->fetchForInstructor($instructor);
+        $vehicles = collect($this->vehicleModel->fetchForInstructor($instructor))
+            ->map(function (object $v): object {
+                $v->is_reclaimable = false;
+                $v->legacy_vehicle_id = null;
+
+                return $v;
+            });
+
+        $legacyInstructorId = $this->instructorModel->resolveLegacyInstructorId($instructor);
+
+        if ($legacyInstructorId) {
+            $reclaimable = collect($this->vehicleModel->fetchReclaimableVehicles($legacyInstructorId))
+                ->map(function (object $v): object {
+                    return (object) [
+                        'id' => null,
+                        'instructor_id' => null,
+                        'vehicle_type' => $v->vehicle_type ?? '-',
+                        'vehicle_model' => $v->vehicle_model ?? '-',
+                        'license_plate' => $v->license_plate ?? '-',
+                        'build_year' => $v->build_year ?? '-',
+                        'fuel_type' => $v->fuel_type ?? '-',
+                        'license_category' => $v->license_category ?? '-',
+                        'is_reclaimable' => true,
+                        'legacy_vehicle_id' => (int) $v->legacy_vehicle_id,
+                        'legacy_vehicle_id_raw' => $v->legacy_vehicle_id,
+                    ];
+                });
+
+            $vehicles = $vehicles->concat($reclaimable);
+        }
 
         return view('rijschoolhouder.instructors.vehicles.index', [
             'instructor' => [
@@ -207,6 +236,33 @@ class InstructorVehicleController extends Controller
         return redirect()->route('loadbar', [
             'redirectTo' => $redirectTo,
             'message' => 'Het door u geselecteerde voertuig is verwijderd',
+        ]);
+    }
+
+    public function reclaim(Request $request, int $instructor): RedirectResponse
+    {
+        $validated = $request->validate([
+            'legacy_vehicle_id' => ['required', 'integer'],
+        ]);
+
+        $legacyInstructorId = $this->instructorModel->resolveLegacyInstructorId($instructor);
+
+        if (! $legacyInstructorId) {
+            return back()->withErrors(['vehicle' => 'Instructeur niet gevonden in legacysysteem.']);
+        }
+
+        if (! $this->vehicleModel->reclaimVehicle((int) $validated['legacy_vehicle_id'], $legacyInstructorId)) {
+            return back()->withErrors(['vehicle' => 'Voertuig kon niet worden teruggevorderd.']);
+        }
+
+        $user = $this->instructorModel->fetchById($instructor);
+        $instructorName = $user
+            ? $this->buildFullName($user->first_name ?? '', $user->tussenvoegsel ?? '', $user->last_name ?? '')
+            : '';
+
+        return redirect()->route('loadbar', [
+            'redirectTo' => route('rijschoolhouder.instructors.vehicles.index', ['instructor' => $instructor]),
+            'message' => "Het geselecteerde voertuig is weer toegewezen aan {$instructorName}",
         ]);
     }
 

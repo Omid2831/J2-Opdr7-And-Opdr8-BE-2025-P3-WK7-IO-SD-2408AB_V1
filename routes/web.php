@@ -58,6 +58,13 @@ Route::middleware(['auth', 'role:rijschoolhouder'])
         Route::delete('/voertuigen/{vehicle}/verwijderen', [InstructorVehicleController::class, 'destroy'])
             ->whereNumber('vehicle')
             ->name('instructors.vehicles.destroy');
+        Route::post(
+            '/instructeurs/{instructor}/voertuigen/terugvorderen/{legacyVehicle}',
+            [InstructorVehicleController::class, 'reclaim']
+        )
+            ->whereNumber('instructor')
+            ->whereNumber('legacyVehicle')
+            ->name('instructors.vehicles.reclaim');
     });
 
 Route::get('/user/dashboard', function () {
