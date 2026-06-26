@@ -39,6 +39,9 @@ Route::middleware(['auth', 'role:rijschoolhouder'])
         Route::post('/instructeurs/{instructor}/status', [InstructorController::class, 'toggleStatus'])
             ->whereNumber('instructor')
             ->name('instructors.toggleStatus');
+        Route::delete('/instructeurs/{instructor}', [InstructorController::class, 'destroy'])
+            ->whereNumber('instructor')
+            ->name('instructors.destroy');
         Route::get('/instructeurs/{instructor}/voertuigen', [InstructorVehicleController::class, 'index'])
             ->name('instructors.vehicles.index');
         Route::get(

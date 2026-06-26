@@ -30,16 +30,16 @@
                     <table class="w-full table-fixed border-collapse text-sm">
                         <thead class="bg-gray-50">
                             <tr class="text-left">
-                                <th class="w-[28%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[24%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Naam') }}
                                 </th>
-                                <th class="w-[16%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[14%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Mobiel') }}
                                 </th>
-                                <th class="w-[16%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[14%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Datum in dienst') }}
                                 </th>
-                                <th class="w-[12%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
+                                <th class="w-[10%] px-4 py-2 border-b border-gray-300 align-middle whitespace-nowrap">
                                     {{ __('Aantal sterren') }}
                                 </th>
                                 <th class="w-24 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
@@ -47,6 +47,9 @@
                                 </th>
                                 <th class="w-24 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
                                     {{ __('Voertuigen') }}
+                                </th>
+                                <th class="w-16 px-4 py-2 border-b border-gray-300 text-center align-middle whitespace-nowrap">
+                                    {{ __('Verwijderen') }}
                                 </th>
                             </tr>
                         </thead>
@@ -100,10 +103,28 @@
                                             </svg>
                                         </a>
                                     </td>
+                                    <td class="px-4 py-2 text-center align-middle">
+                                        <form method="POST"
+                                            action="{{ route('rijschoolhouder.instructors.destroy', $instructor['id']) }}">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="inline-flex items-center justify-center text-red-600 hover:text-red-800"
+                                                title="{{ __('Verwijderen') }}"
+                                                onclick="return confirm('{{ __('Weet u zeker dat u deze instructeur wilt verwijderen?') }}')">
+                                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M18 6L6 18M6 6l12 12" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-4 py-6 text-center text-gray-500">
+                                    <td colspan="7" class="px-4 py-6 text-center text-gray-500">
                                         {{ __('Geen instructeurs gevonden.') }}
                                     </td>
                                 </tr>

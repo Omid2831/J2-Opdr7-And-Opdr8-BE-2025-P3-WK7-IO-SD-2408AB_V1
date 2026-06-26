@@ -112,4 +112,31 @@ class Instructor extends Model
             throw $exception;
         }
     }
+
+    public function remove(int $userId, int $legacyInstructorId): bool
+    {
+        try {
+            Log::info('Instructor removal started.', [
+                'user_id' => $userId,
+                'legacy_instructor_id' => $legacyInstructorId,
+            ]);
+
+            DB::statement('CALL sp_remove_instructor(?, ?)', [$userId, $legacyInstructorId]);
+
+            Log::info('Instructor removal completed.', [
+                'user_id' => $userId,
+                'legacy_instructor_id' => $legacyInstructorId,
+            ]);
+
+            return true;
+        } catch (Throwable $exception) {
+            Log::error('Instructor removal failed.', [
+                'user_id' => $userId,
+                'legacy_instructor_id' => $legacyInstructorId,
+                'exception' => $exception,
+            ]);
+
+            return false;
+        }
+    }
 }

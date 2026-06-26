@@ -81,4 +81,50 @@ class InstructorController extends Controller
             'message' => $message,
         ]);
     }
+
+    public function destroy(int $instructor): RedirectResponse
+    {
+        $user = $this->instructorModel->fetchById($instructor);
+
+        if (! $user) {
+            abort(404, 'Instructor not found.');
+        }
+
+        $legacyInstructorId = $this->instructorModel->resolveLegacyInstructorId($instructor);
+
+        if (! $legacyInstructorId) {
+            return back()->withErrors(['instructor' => 'Instructeur niet gevonden in legacysysteem.']);
+        }
+
+        $legacyStatus = $this->instructorModel->fetchByLegacyId($legacyInstructorId);
+        $isActief = $legacyStatus ? (bool) $legacyStatus->IsActief : true;
+
+        if (! $isActief) {
+            $instructorName = $this->buildFullName(
+                $user->first_name ?? '',
+                $user->tussenvoegsel ?? '',
+                $user->last_name ?? '',
+            );
+
+            return redirect()->route('loadbar', [
+                'redirectTo' => route('rijschoolhouder.instructors.index'),
+                'message' => "Instructeur {$instructorName} kan niet definitief worden verwijderd, verander eerst de status ziekte/verlof",
+            ]);
+        }
+
+        $instructorName = $this->buildFullName(
+            $user->first_name ?? '',
+            $user->tussenvoegsel ?? '',
+            $user->last_name ?? '',
+        );
+
+        if (! $this->instructorModel->remove($instructor, $legacyInstructorId)) {
+            return back()->withErrors(['instructor' => 'Instructeur kon niet worden verwijderd.']);
+        }
+
+        return redirect()->route('loadbar', [
+            'redirectTo' => route('rijschoolhouder.instructors.index'),
+            'message' => "Instructeur {$instructorName} is definitief verwijdert en al zijn eerder toegewezen voertuigen zijn vrijgegeven",
+        ]);
+    }
 }
